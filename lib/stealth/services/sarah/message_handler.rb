@@ -17,7 +17,7 @@ module Stealth
           Stealth::Services::HandleMessageJob.perform_async('sarah', params, {})
           puts "Hello Manu"
           # Relay our acceptance
-          [204, 'No Content']
+          [200, 'ok']
         end
 
         def process
