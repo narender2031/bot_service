@@ -6,6 +6,7 @@ module Stealth
         attr_reader :recipient_id, :reply
 
         def initialize(recipient_id:, reply:)
+          puts "Hllo Reply"
           puts recipient_id
           puts reply.inspect
           @recipient_id = recipient_id

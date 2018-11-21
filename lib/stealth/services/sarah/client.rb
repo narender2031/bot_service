@@ -11,16 +11,21 @@ module Stealth
   module Services
     module Sarah
       class Client < Stealth::Services::BaseClient
-        API_ENDPOINT = "http://localhost:3000/api/v1/graph/results"
         attr_reader :body
 
         def initialize(reply:)
+          puts "Hllo client"
+          puts reply 
           @body = reply[:body]
+          @encounter_id = reply[:encounter_id]
+          @response_helper = reply[:response_helper]
         end
 
         def transmit
           data = {
-            message: body 
+            message: body,
+            user_id: @encounter_id,
+            message_type: @response_helper,
           }
           # Don't transmit anything for delays
           return true if body.blank? || body.nil?
@@ -31,12 +36,12 @@ module Stealth
           request = Net::HTTP::Post.new(url)
           request["accept"] = 'application/json'
           request["content-type"] = 'application/json'
-          request["cache-control"] = 'no-cache'
-          request["postman-token"] = 'f03a2463-0248-008b-4a17-3729cb69d6dc'
           request.body = data.to_json
           response = http.request(request)
           puts response.read_body
-         # Need to write the transmit api to send the response of to our rails app.   
+
+          [200, "comelete"]
+          # Need to write the transmit api to send the response of to our rails app.   
           Stealth::Logger.l(topic: 'sarah', message: "Transmitting. Reply: #{body}.")
         end
 
