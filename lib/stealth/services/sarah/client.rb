@@ -32,10 +32,13 @@ module Stealth
 
           url = URI("#{API_URL}")
           http = Net::HTTP.new(url.host, url.port)
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
           request = Net::HTTP::Post.new(url)
-          request["accept"] = 'application/json'
           request["content-type"] = 'application/json'
           request.body = data.to_json
+
           response = http.request(request)
           puts response.read_body
           # Need to write the transmit api to send the response of to our rails app.   
