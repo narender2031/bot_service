@@ -1,7 +1,6 @@
 # coding: utf-8
 # frozen_string_literal: true
-require 'uri'
-require 'net/http'
+
 require 'stealth/services/sarah/message_handler'
 require 'stealth/services/sarah/reply_handler'
 require 'stealth/services/sarah/setup'
@@ -14,6 +13,7 @@ module Stealth
         attr_reader :body
 
         def initialize(reply:)
+          puts "Hellllllooooooooo"
           @reply = reply 
           @body = reply[:message][:body]
           @encounter_id = reply[:encounter_id]
@@ -35,6 +35,8 @@ module Stealth
           }
           # Don't transmit anything for delays
           return true if body.blank? || body.nil?
+          require 'uri'
+          require 'net/http'
           url = URI("https://chatbot-rails-staging.herokuapp.com/api/v1/graph/results")
           http = Net::HTTP.new(url.host, url.port)
           http.use_ssl = true
