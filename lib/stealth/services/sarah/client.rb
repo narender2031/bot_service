@@ -36,7 +36,7 @@ module Stealth
           }
           # Don't transmit anything for delays
           return true if body.blank? || body.nil?
-          url = URI("http://localhost:3000/api/v1/graph/results")
+          url = URI("https://chatbot-rails-staging.herokuapp.com/api/v1/graph/results")
 
           http = Net::HTTP.new(url.host, url.port)
 
