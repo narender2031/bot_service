@@ -36,13 +36,13 @@ module Stealth
           # Don't transmit anything for delays
           return true if body.blank? || body.nil?
           url = URI("https://chatbot-rails-staging.herokuapp.com/api/v1/graph/results")
-
           http = Net::HTTP.new(url.host, url.port)
-
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
           request = Net::HTTP::Post.new(url)
-          request["accept"] = 'application/json'
           request["content-type"] = 'application/json'
           request.body = data.to_json
+
           response = http.request(request)
           puts response.read_body
 
