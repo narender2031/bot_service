@@ -12,8 +12,9 @@ module Stealth
     module Sarah
       class Client < Stealth::Services::BaseClient
         attr_reader :body
-        API_URL='https://chatbot-rails-staging.herokuapp.com/api/v1/graph/results'
+        API_URL= Stealth.config.sarah.response_url
         def initialize(reply:)
+          puts API_URL
           @reply = reply 
           @body = reply[:message][:body]
           @encounter_id = reply[:encounter_id]
@@ -21,7 +22,6 @@ module Stealth
         end
 
         def transmit
-          
           data = {
             message: body,
             user_id: @encounter_id,
@@ -29,18 +29,15 @@ module Stealth
           }
           # Don't transmit anything for delays
           return true if body.blank? || body.nil?
-          
+
           url = URI("#{API_URL}")
           http = Net::HTTP.new(url.host, url.port)
-          http.use_ssl = true
-          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
           request = Net::HTTP::Post.new(url)
+          request["accept"] = 'application/json'
           request["content-type"] = 'application/json'
-          request.body =  data.to_json
-
+          request.body = data.to_json
           response = http.request(request)
           puts response.read_body
-
           # Need to write the transmit api to send the response of to our rails app.   
           Stealth::Logger.l(topic: 'sarah', message: "Transmitting. Reply: #{body}.")
         end
