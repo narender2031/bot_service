@@ -18,12 +18,12 @@ module Stealth
           @body = reply[:message][:body]
           @encounter_id = reply[:encounter_id]
           @response_helper = reply[:message][:response_helper]
-          @button = ''
-          if reply[:buttons].present?
-            @button = reply[:buttons]
-            puts "-------------------------"
-            puts @button
-          end
+          # @button = ''
+          # if reply[:buttons].present?
+          #   @button = reply[:buttons]
+          #   puts "-------------------------"
+          #   puts @button
+          # end
         end
 
         def transmit
@@ -31,8 +31,7 @@ module Stealth
           data = {
             message: body,
             user_id: @encounter_id,
-            message_type: @response_helper,
-            buttons: @button
+            message_type: @response_helper
           }
           # Don't transmit anything for delays
           return true if body.blank? || body.nil?
