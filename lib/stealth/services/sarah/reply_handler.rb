@@ -15,9 +15,13 @@ module Stealth
 
         def text
           response = {
-            body:  @reply.reply['text'],
-            response_helper: @reply.reply['reply_type'] || { type: 'NONE' },
             encounter_id: @recipient_id,
+            message:{
+              body:  @reply.reply['text'],
+              response_helper: @reply.reply['reply_type'] || { type: 'NONE' },
+            },
+            buttons:  @reply.reply['buttons']
+            
           }
           puts response  
           response

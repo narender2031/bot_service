@@ -14,18 +14,25 @@ module Stealth
         attr_reader :body
 
         def initialize(reply:)
-          puts "Hllo client"
-          puts reply 
-          @body = reply[:body]
+          @reply = reply 
+          @body = reply[:message][:body]
           @encounter_id = reply[:encounter_id]
-          @response_helper = reply[:response_helper]
+          @response_helper = reply[:message][:response_helper]
+          @button = ''
+          if reply[:buttons].present?
+            @button = reply[:buttons]
+            puts "-------------------------"
+            puts @button
+          end
         end
 
         def transmit
+          
           data = {
             message: body,
             user_id: @encounter_id,
             message_type: @response_helper,
+            buttons: @button
           }
           # Don't transmit anything for delays
           return true if body.blank? || body.nil?
