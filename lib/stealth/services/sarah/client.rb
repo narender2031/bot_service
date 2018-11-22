@@ -1,6 +1,7 @@
 # coding: utf-8
 # frozen_string_literal: true
-
+require 'uri'
+require 'net/http'
 require 'stealth/services/sarah/message_handler'
 require 'stealth/services/sarah/reply_handler'
 require 'stealth/services/sarah/setup'
@@ -11,19 +12,12 @@ module Stealth
     module Sarah
       class Client < Stealth::Services::BaseClient
         attr_reader :body
-
+        API_URL='https://chatbot-rails-staging.herokuapp.com/api/v1/graph/results'
         def initialize(reply:)
-          puts "Hellllllooooooooo"
           @reply = reply 
           @body = reply[:message][:body]
           @encounter_id = reply[:encounter_id]
           @response_helper = reply[:message][:response_helper]
-          # @button = ''
-          # if reply[:buttons].present?
-          #   @button = reply[:buttons]
-          #   puts "-------------------------"
-          #   puts @button
-          # end
         end
 
         def transmit
@@ -35,9 +29,8 @@ module Stealth
           }
           # Don't transmit anything for delays
           return true if body.blank? || body.nil?
-          require 'uri'
-          require 'net/http'
-          url = URI("https://chatbot-rails-staging.herokuapp.com/api/v1/graph/results")
+          
+          url = URI("#{API_URL}")
           http = Net::HTTP.new(url.host, url.port)
           http.use_ssl = true
           http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -48,7 +41,6 @@ module Stealth
           response = http.request(request)
           puts response.read_body
 
-          [200, "comelete"]
           # Need to write the transmit api to send the response of to our rails app.   
           Stealth::Logger.l(topic: 'sarah', message: "Transmitting. Reply: #{body}.")
         end

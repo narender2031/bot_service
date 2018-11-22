@@ -18,7 +18,6 @@ module Stealth
               response_helper: @reply.reply['reply_type'] || { type: 'NONE' },
             },
             buttons:  @reply.reply['buttons']
-
           }
           response
         end
