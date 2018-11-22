@@ -43,7 +43,7 @@ module Stealth
           http.verify_mode = OpenSSL::SSL::VERIFY_NONE
           request = Net::HTTP::Post.new(url)
           request["content-type"] = 'application/json'
-          request.body =  "{\n\t \"message\": \"body\",\n    \"user_id\": 1,\n    \"message_type\": \"Text\"\n}"
+          request.body =  data.to_json
 
           response = http.request(request)
           puts response.read_body
