@@ -14,6 +14,7 @@ module Stealth
         end
 
         def coordinate
+          puts params
           Stealth::Services::HandleMessageJob.perform_async('sarah', params, {})
           # Relay our acceptance
         end
@@ -22,6 +23,7 @@ module Stealth
           @service_message = ServiceMessage.new(service: 'sarah')
           @service_message.sender_id = params['encounter_id']
           @service_message.message = params['value']
+          @service_message.payload = params['payload']
           @service_message
         end
 

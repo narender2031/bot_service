@@ -7,17 +7,17 @@ module Stealth
 
         def initialize(recipient_id:, reply:)
           @recipient_id = recipient_id
-          @reply = reply
+          @reply = reply.reply
         end
 
         def text
           response = {
             encounter_id: @recipient_id,
             message:{
-              body:  @reply.reply['text'],
-              response_helper: @reply.reply['reply_type'] || { type: 'NONE' },
+              body:  reply['text'],
+              response_helper: reply['reply_type'] || { type: 'NONE' },
             },
-            buttons:  @reply.reply['buttons']
+            buttons:  reply['buttons']
           }
           response
         end
