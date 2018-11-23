@@ -13,6 +13,7 @@ module Stealth
       class Client < Stealth::Services::BaseClient
         attr_reader :body
         API_URL= Stealth.config.sarah.response_url
+        USE_SSL= Stealth.config.sarah.use_ssl
         def initialize(reply:)
           puts API_URL
           @reply = reply 
@@ -32,7 +33,7 @@ module Stealth
 
           url = URI("#{API_URL}")
           http = Net::HTTP.new(url.host, url.port)
-          http.use_ssl = true
+          http.use_ssl = USE_SSL
           http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
           request = Net::HTTP::Post.new(url)
