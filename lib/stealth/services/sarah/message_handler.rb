@@ -14,7 +14,6 @@ module Stealth
         end
 
         def coordinate
-          puts params
           Stealth::Services::HandleMessageJob.perform_async('sarah', params, {})
           # Relay our acceptance
         end
