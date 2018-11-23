@@ -11,22 +11,23 @@ module Stealth
   module Services
     module Sarah
       class Client < Stealth::Services::BaseClient
-        attr_reader :body
+        attr_reader :body, :encounter_id, :response_helper, :buttons
         API_URL= Stealth.config.sarah.response_url
         USE_SSL= Stealth.config.sarah.use_ssl
         def initialize(reply:)
-          puts API_URL
           @reply = reply 
           @body = reply[:message][:body]
           @encounter_id = reply[:encounter_id]
           @response_helper = reply[:message][:response_helper]
+          @buttons = reply[:buttons] if reply[:buttons].present?
         end
 
         def transmit
           data = {
             message: body,
-            user_id: @encounter_id,
-            message_type: @response_helper
+            user_id: encounter_id,
+            message_type: response_helper,
+            buttons: buttons
           }
           # Don't transmit anything for delays
           return true if body.blank? || body.nil?
