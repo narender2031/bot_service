@@ -11,27 +11,16 @@ module Stealth
   module Services
     module Sarah
       class Client < Stealth::Services::BaseClient
-        attr_reader :body, :encounter_id, :response_helper, :buttons
+        attr_reader :body, :user_id
         API_URL= Stealth.config.sarah.response_url
         USE_SSL= Stealth.config.sarah.use_ssl
         def initialize(reply:)
-          @reply = reply 
-          @body = reply[:message][:body]
-          @encounter_id = reply[:encounter_id]
-          @response_helper = reply[:message][:response_helper]
-          @buttons = reply[:buttons] if reply[:buttons].present?
+          @reply = reply
         end
 
         def transmit
-          data = {
-            message: body,
-            user_id: encounter_id,
-            message_type: response_helper,
-            buttons: buttons
-          }
           # Don't transmit anything for delays
-          return true if body.blank? || body.nil?
-
+          return true if reply.blank? || reply.nil?
           url = URI("#{API_URL}")
           http = Net::HTTP.new(url.host, url.port)
           http.use_ssl = USE_SSL
@@ -39,9 +28,10 @@ module Stealth
 
           request = Net::HTTP::Post.new(url)
           request["content-type"] = 'application/json'
-          request.body = data.to_json
+          request.body = reply.to_json
 
           response = http.request(request)
+
           puts response.read_body
           # Need to write the transmit api to send the response of to our rails app.   
           Stealth::Logger.l(topic: 'sarah', message: "Transmitting. Reply: #{body}.")

@@ -11,13 +11,11 @@ module Stealth
         end
 
         def text
+          body =  compose_message(reply['text'], reply['reply_type'], reply['buttons'])
+          encounter_id =  recipient_id
           response = {
-            encounter_id: @recipient_id,
-            message:{
-              body:  reply['text'],
-              response_helper: reply['reply_type'] || { type: 'NONE' },
-            },
-            buttons:  reply['buttons']
+            body: body,
+            user_id: encounter_id
           }
           response
         end
@@ -25,7 +23,21 @@ module Stealth
         def delay
           { body: nil, response_helper: nil, encounter_id: @recipient_id }
         end
+        
+        private
 
+        def compose_message(message, type, actions)
+          message = {
+            content: {
+              text: message,
+              type: type,
+              actions: actions || []
+            }, 
+            meta: {},
+            type: type
+          }
+          return message
+        end
       end
     end
   end
