@@ -12,12 +12,27 @@ module Stealth
 
         def text
           body =  compose_message(reply['text'], reply['reply_type'], reply['buttons'])
-          encounter_id =  recipient_id
-          response = {
-            body: body,
-            user_id: encounter_id
-          }
-          response
+          response = generate_response(@recipient_id, body)
+        end
+
+        def email
+          body =  compose_message(reply['text'], reply['reply_type'], reply['buttons'])
+          response = generate_response(@recipient_id, body)
+        end
+
+        def number
+          body =  compose_message(reply['text'], reply['reply_type'], reply['buttons'])     
+          response = generate_response(@recipient_id, body)
+        end
+
+        def name
+          body =  compose_message(reply['text'], reply['reply_type'], reply['buttons'])
+          response = generate_response(@recipient_id, body)
+        end
+
+        def password
+          body =  compose_message(reply['text'], reply['reply_type'], reply['buttons'])
+          response = generate_response(@recipient_id, body)
         end
 
         def delay
@@ -38,6 +53,15 @@ module Stealth
           }
           return message
         end
+
+        def generate_response(recipient_id, body)
+          encounter_id =  recipient_id
+          response = {
+            body: body,
+            user_id: encounter_id
+          }
+        end
+
       end
     end
   end
