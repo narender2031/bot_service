@@ -20,6 +20,7 @@ module Stealth
 
         def transmit
           # Don't transmit anything for delays
+          puts reply.to_json
           return true if reply.blank? || reply.nil?
           url = URI("#{API_URL}")
           http = Net::HTTP.new(url.host, url.port)
@@ -31,10 +32,10 @@ module Stealth
           request.body = reply.to_json
 
           response = http.request(request)
-
+          puts response.code
           puts response.read_body
           # Need to write the transmit api to send the response of to our rails app.   
-          Stealth::Logger.l(topic: 'sarah', message: "Transmitting. Reply: #{body}.")
+          Stealth::Logger.l(topic: 'sarah', message: "Transmitting. Reply: #{reply.to_json}.")
         end
 
         private
