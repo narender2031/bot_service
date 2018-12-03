@@ -25,7 +25,26 @@ module Stealth
         def delay
           { body: nil, response_helper: nil, encounter_id: @recipient_id }
         end
+
+        def name
+          resposne = compose_message(reply: reply)
+          puts resposne
+          resposne
+        end
         
+
+        def email
+          resposne = compose_message(reply: reply)
+          puts resposne
+          resposne
+        end
+
+
+        def password
+          resposne = compose_message(reply: reply)
+          puts resposne
+          resposne
+        end
         private
 
 
@@ -66,49 +85,13 @@ module Stealth
 
         def generate_buttons(buttons:)
           reply_buttons =  buttons.collect do |button|
-            case button['type']
-            when 'payload'
-              button = {
-                type: "postback",
-                payload: button['payload'],
-                text: button['text'],
-                other: button['other_value']
-              }
-
-            when 'urls'
-              button = {
-                type: "web_url",
-                url: button['url'],
-                text: button['text'],
-                other: button['other_value']
-              }
-
-            when 'call'
-              button = {
-                type: "phone_number",
-                payload: button["phone_number"],
-                text: button["text"],
-                other: button['other_value']
-              }
-
-            when 'email'
-              button = {
-                type: "email",
-                payload: button["email"],
-                text: button['text'],
-                other: button['other_value']
-              }
-
-            else
-              button = {
-                type: button['type'],
-                payload: button['payload'],
-                text: button['text'],
-                url: button['url'],
-                other: button['other_value']
-                
-              }
-            end
+            button = {
+              type: button['type'],
+              payload: button['payload'],
+              text: button['text'],
+              url: button['url'],
+              other: button['other_value']
+            }
             button
           end
           reply_buttons
@@ -119,6 +102,15 @@ module Stealth
             acction_type:'buttons',
             buttons: buttons
           }
+        end
+
+        def greeting
+          Stealth.config.sarah.setup.greeting.map do |greeting|
+            {
+              locale: greeting['locale'],
+              text: greeting['text']
+            }
+          end
         end
       end
     end
